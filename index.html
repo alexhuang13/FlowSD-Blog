@@ -113,28 +113,58 @@
       <section class="section" id="balance">
         <p class="section__label">Part 02</p>
         <h2>Trajectory Balance</h2>
-        <p>The FlowSD target says where probability should settle. Trajectory balance makes the student represent it by matching each complete response's student-to-reference probability ratio to its energy, with one shared partition value for the rollout group.</p>
+        <p>FlowSD has already defined the desired distribution over complete responses. Trajectory balance turns that distribution into a trainable condition: if the student matches the target, then every sampled response $y_i$ must satisfy</p>
 
-        <div class="balance-map">
-          <div><span>Known</span><b>Reference probability</b><i>+</i><b>Trajectory energy</b></div>
-          <svg viewBox="0 0 98 36" aria-hidden="true"><path d="M4 11h82l-8-7M94 25H12l8 7"/></svg>
-          <div class="balance-map__learn"><span>Learned</span><b>Student probability</b><i>+</i><b>Group partition</b></div>
+        <div class="tb-equation tb-equation--target">
+          <span>Target condition</span>
+          $$\pi_\theta(y_i\mid x)
+          =\frac{1}{Z_{\mathcal G}(x,c)}
+          \pi_{\mathrm{ref}}(y_i\mid x)
+          \exp\!\left(\frac{E_i}{\tau}\right).$$
         </div>
 
-        <div class="equation-card equation-card--plain">
-          $$\Delta_i=\tau\log Z_{\mathcal G}+\tau\log\frac{\pi_\theta(y_i)}{\pi_{\mathrm{ref}}(y_i)}-E_i,
-          \qquad
-          \mathcal L_{\mathrm{FlowSD}}=\frac{1}{2N}\sum_i\Delta_i^2.$$
+        <p>Taking logs and moving all terms to one side gives the trajectory-balance residual:</p>
+
+        <div class="tb-equation">
+          <span>Trajectory-balance residual</span>
+          $$\Delta_i
+          =\tau\log Z_{\mathcal G}
+          +\tau\log\frac{\pi_\theta(y_i\mid x)}{\pi_{\mathrm{ref}}(y_i\mid x)}
+          -E_i.$$
         </div>
 
-        <aside class="margin-note"><b>Why $Z$ matters.</b> Without a partition value, $E_i$ is only a collection of scores. The shared $Z_{\mathcal G}$ turns those scores into one probability-conserving equilibrium.</aside>
+        <p>FlowSD minimizes the squared residual across the rollout group:</p>
+
+        <div class="tb-equation tb-equation--loss">
+          <span>FlowSD objective</span>
+          $$\mathcal L_{\mathrm{FlowSD}}
+          =\frac{1}{2N}\sum_{i=1}^{N}\Delta_i^2.$$
+        </div>
+
+        <div class="tb-logic">
+          <article><span>01</span><div><b>Complete-response supervision</b><p>The gradient flows through the sum of student token log-probabilities, but the balance condition is imposed on the probability of the full response.</p></div></article>
+          <article><span>02</span><div><b>One partition per rollout group</b><p>All responses to the same prompt share $Z_{\mathcal G}$. It converts trajectory energies into a normalized distribution rather than independent scores.</p></div></article>
+          <article><span>03</span><div><b>Profile the unknown normalizer</b><p>Each response implies a value of $\log Z$; FlowSD uses their group mean and stops gradients through this estimate.</p></div></article>
+        </div>
+
+        <div class="tb-partition">
+          <span>Group partition estimate</span>
+          $$\widehat{\log Z}_{\mathcal G}
+          =\frac{1}{N}\sum_{i=1}^{N}
+          \left[
+          \frac{E_i}{\tau}
+          -\log\frac{\pi_\theta(y_i\mid x)}{\pi_{\mathrm{ref}}(y_i\mid x)}
+          \right].$$
+        </div>
 
         <details class="inline-theory" open>
           <summary><span>Contrast preservation</span><b>Profiling one scalar $Z$ preserves every pairwise response preference.</b><i>−</i></summary>
           <div>
             <p>At zero profiled trajectory-balance loss, for every $i,j$ with positive reference support,</p>
-            $$\frac{\pi(y_i)}{\pi(y_j)}=\frac{\pi_{\mathrm{ref}}(y_i)}{\pi_{\mathrm{ref}}(y_j)}\exp\!\left(\frac{E_i-E_j}{\tau}\right).$$
-            <p>The scalar partition removes one common group offset and preserves the remaining $N-1$ within-group contrast directions.</p>
+            $$\frac{\pi_\theta(y_i\mid x)}{\pi_\theta(y_j\mid x)}
+            =\frac{\pi_{\mathrm{ref}}(y_i\mid x)}{\pi_{\mathrm{ref}}(y_j\mid x)}
+            \exp\!\left(\frac{E_i-E_j}{\tau}\right).$$
+            <p>The shared partition cancels in the ratio. It removes one common group offset while preserving all $N-1$ relative-probability directions.</p>
           </div>
         </details>
       </section>

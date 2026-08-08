@@ -402,3 +402,42 @@ footer {
   width: 100%;
   text-align: center !important;
 }
+
+/* Trajectory Balance narrative: target condition -> residual -> loss -> partition. */
+.tb-equation,
+.tb-logic,
+.tb-partition {
+  width: 100%; max-width: var(--content); margin-left: auto; margin-right: auto;
+}
+.tb-equation {
+  margin-top: 18px; margin-bottom: 20px; padding: 19px 22px;
+  border-left: 3px solid var(--blue); background: var(--blue-wash); overflow-x: auto;
+}
+.tb-equation > span,
+.tb-partition > span {
+  display: block; font: 700 11px var(--sans); letter-spacing: .09em;
+  text-transform: uppercase; color: var(--blue-ink);
+}
+.tb-equation mjx-container[display="true"],
+.tb-partition mjx-container[display="true"] { margin: .6em 0 .2em !important; }
+.tb-equation--target { background: var(--surface); border: 1px solid var(--line); border-left: 3px solid var(--blue); }
+.tb-equation--loss { background: var(--line2); border-left-color: var(--muted); }
+.tb-equation--loss > span { color: var(--muted); }
+.tb-logic { margin-top: 28px; margin-bottom: 22px; border-top: 1px solid var(--line); }
+.tb-logic article {
+  display: grid; grid-template-columns: 42px 1fr; gap: 10px;
+  padding: 17px 0; border-bottom: 1px solid var(--line);
+}
+.tb-logic article > span {
+  font: 600 12px var(--mono); color: var(--blue-ink);
+}
+.tb-logic b { font-size: 16px; }
+.tb-logic p { margin: 3px 0 0; font-size: 15px; line-height: 1.55; color: var(--soft); }
+.tb-partition {
+  margin-top: 22px; margin-bottom: 24px; padding: 18px 22px;
+  border: 1px solid var(--line); border-radius: 8px; background: var(--surface); overflow-x: auto;
+}
+@media(max-width:760px){
+  .tb-equation,.tb-partition { padding: 16px 13px; }
+  .tb-equation mjx-container,.tb-partition mjx-container { font-size: 86% !important; }
+}

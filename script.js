@@ -16,7 +16,7 @@
 
   $$(".theorems details, .inline-theory").forEach(d=>d.addEventListener("toggle",()=>{const i=d.querySelector("summary i");if(i)i.textContent=d.open?"−":"+"}));
 
-  const reveal=$$(".takeaways,.flow-round,.equation-card,.term-grid,.story-callout,.inline-theory,.balance-map,.gate-rule,.mass-explainer,.experiment-prompt,.mass-lab,.paper-results,.diversity-formula,.diversity-paper-figure,.case-study,.scope-note,.closing");reveal.forEach(x=>x.classList.add("reveal"));
+  const reveal=$$(".takeaways,.flow-round,.equation-card,.term-grid,.story-callout,.inline-theory,.tb-equation,.tb-logic,.tb-partition,.gate-rule,.mass-explainer,.experiment-prompt,.mass-lab,.paper-results,.diversity-formula,.diversity-paper-figure,.case-study,.scope-note,.closing");reveal.forEach(x=>x.classList.add("reveal"));
   const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add("in");io.unobserve(e.target)}}),{threshold:.08});reveal.forEach(x=>io.observe(x));
   if(new URLSearchParams(location.search).get("prefetch-in-view")==="1")reveal.forEach(x=>x.classList.add("in"));
 

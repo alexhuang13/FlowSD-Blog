@@ -9,6 +9,8 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,500;0,8..60,600;0,8..60,700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
   <link rel="icon" type="image/svg+xml" href="assets/icons/book-mark.svg" />
+  <link rel="alternate" hreflang="en" href="index.html" />
+  <link rel="alternate" hreflang="zh-CN" href="zh.html" />
   <link rel="stylesheet" href="style.css" />
   <script>
     window.MathJax={tex:{inlineMath:[["$","$"],["\\(","\\)"]],displayMath:[["$$","$$"],["\\[","\\]"]],processEscapes:true,tags:"none"},svg:{fontCache:"global"},options:{skipHtmlTags:["script","noscript","style","textarea","pre","code"]}};
@@ -27,6 +29,10 @@
         <a href="#results">Experiments</a>
         <a href="#diversity">Diversity</a>
         <a class="topnav__pill" href="#cite">Cite</a>
+        <div class="lang-switch" role="group" aria-label="Language">
+          <a class="active" href="index.html" lang="en" aria-current="page">EN</a>
+          <a href="zh.html" lang="zh-CN">中文</a>
+        </div>
         <button id="theme-toggle" class="theme" aria-label="Toggle dark mode">
           <svg class="sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4.5"/><path d="M12 2v2.5M12 19.5V22M2 12h2.5M19.5 12H22M4.9 4.9l1.8 1.8M17.3 17.3l1.8 1.8M19.1 4.9l-1.8 1.8M6.7 17.3l-1.8 1.8"/></svg>
           <svg class="moon" viewBox="0 0 24 24"><path d="M20 15a8 8 0 1 1-11-11 7 7 0 0 0 11 11Z"/></svg>
@@ -307,7 +313,7 @@
               <div><i>coordinate embedding</i><i>Pythagorean structure</i><i>triple product</i></div>
             </article>
           </div>
-          <p class="case-study__point">Both trajectories are correct. The distinction is not wording or arithmetic order—the mathematical representation that makes the solution work is different.</p>
+          <p class="case-study__point">Both trajectories are correct; the distinct determinant and box-embedding routes illustrate FlowSD's greater diversity among successful strategies.</p>
         </div>
 
       </section>

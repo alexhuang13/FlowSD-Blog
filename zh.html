@@ -25,6 +25,7 @@
     <div class="topbar__inner">
       <a class="brand" href="#top">FlowSD</a>
       <nav class="topnav" aria-label="文章导航">
+        <a href="#motivation">动机</a>
         <a href="#methodology">方法</a>
         <a href="#balance">轨迹平衡</a>
         <a href="#results">实验</a>
@@ -47,6 +48,7 @@
     <aside class="toc" aria-label="目录">
       <p>目录</p>
       <nav>
+        <a href="#motivation">动机</a>
         <a href="#methodology">方法</a>
         <a href="#balance">轨迹平衡</a>
         <a href="#gate">何时信任教师</a>
@@ -63,6 +65,28 @@
         <p class="hero__lead">
           长程推理问题通常存在多种有效解题策略。可验证奖励强化学习提供可靠但稀疏的结果监督，在策略自蒸馏则提供稠密的特权反馈；然而，标准的局部目标仍未规定概率应如何分配到完整回答上。FlowSD 用验证器导出的组相对优势和符号门控的教师增益，定义一个由参考策略支撑的目标分布；再通过剖面化轨迹平衡拟合这一归一化目标，明确决定推理概率质量最终应落在哪里。
         </p>
+
+        <div class="motivation-visual" id="motivation">
+          <div class="motivation-visual__story" aria-label="动机叙述">
+            <article>
+              <span>RLVR</span>
+              <b>正确性锚点</b>
+              <p>知道哪条完整回答通过验证，但很难给推理路径内部做细粒度归因。</p>
+            </article>
+            <article class="motivation-visual__negative">
+              <span>OPSD / SDPO</span>
+              <b>稠密教师信号</b>
+              <p>局部信任特权教师时，可能把推理压缩成更短、更自信的轨迹。</p>
+            </article>
+          </div>
+
+          <figure class="motivation-figure">
+            <a class="motivation-figure__link" href="https://arxiv.org/pdf/2603.24472v3" target="_blank" rel="noopener">
+              <img src="negative.png" alt="负面结果：与 GRPO 相比，SDPO 的训练分数和回答长度下降。" />
+            </a>
+            <figcaption><b>负面案例。</b> 稠密自蒸馏可能显得更自信，却导致回答长度塌缩并损害训练分数。<a href="https://arxiv.org/pdf/2603.24472v3" target="_blank" rel="noopener">来源：arXiv:2603.24472v3</a>。</figcaption>
+          </figure>
+        </div>
 
         <div class="byline">
           <p class="authors">Zixun Huang<sup>*1,2</sup>, Kishan Panaganti<sup>*†1</sup>, Haitao Mi<sup>1</sup>, Leowei Liang<sup>1</sup></p>
@@ -232,9 +256,9 @@
           <summary><span>符号门控保证</span><b>教师对错误回答的支持会转化为偏向正确回答的概率修正。</b><i>+</i></summary>
           <div>
             <p>考虑同一混合结果 rollout 组中的一条验证通过回答 $y_+$ 和一条被验证器拒绝的回答 $y_-$。与其他条件相同但不使用门控的教师塑形相比，符号门控将它们的目标概率比改变为</p>
-            $$\frac{p^\star_{\mathrm{gated}}(y_+)/p^\star_{\mathrm{gated}}(y_-)}
-            {p^\star_{\mathrm{ungated}}(y_+)/p^\star_{\mathrm{ungated}}(y_-)}
-            =\exp\!\left(\frac{2\beta_TG_T(y_-\mid x,c)}{\tau}\right).$$
+            $$\frac{p^\star_{\mathrm{gated}}(y_+)}{p^\star_{\mathrm{gated}}(y_-)}
+            =\frac{p^\star_{\mathrm{ungated}}(y_+)}{p^\star_{\mathrm{ungated}}(y_-)}
+            \exp\!\left(\frac{2\beta_TG_T(y_-\mid x,c)}{\tau}\right).$$
             <p>因此，当特权教师为被拒绝回答赋予正增益时，门控会将这份支持从模仿压力转化为正确回答相对于错误回答的概率比增益。</p>
           </div>
         </details>

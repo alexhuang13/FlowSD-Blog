@@ -604,3 +604,19 @@ html[lang="zh-CN"] figcaption { font-family: "Inter", "PingFang SC", "Microsoft 
 @media(max-width:760px){
   .motivation-figure{width:100%}
 }
+
+/* Keep the Part 01 title typographically identical to all section titles. */
+.section h2,
+.motivation-intro > h2 {
+  margin:9px auto 18px;
+  font-family:var(--serif);
+  font-size:clamp(29px,3.8vw,38px);
+  font-weight:600;
+  line-height:1.16;
+  letter-spacing:-.02em;
+  color:var(--ink);
+}
+@media(max-width:760px){
+  .section h2,
+  .motivation-intro > h2 { font-size:30px; }
+}

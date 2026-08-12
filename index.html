@@ -72,8 +72,8 @@
         </div>
 
         <div class="motivation-intro" id="motivation">
-          <p class="section__label">Motivation</p>
-          <h2>Reasoning is a distribution over complete trajectories</h2>
+          <p class="section__label">Part 01</p>
+          <h2>Motivation</h2>
           <p>Given a problem $x$, a reasoning policy generates a complete response $y=(y_1,\ldots,y_T)\sim\pi_\theta(\cdot\mid x)$. A verifier returns an outcome $r(x,y)$—for example, whether the final answer is correct. The successful set</p>
           <div class="equation-card equation-card--plain motivation-equation">
             $$\mathcal Y^+(x)=\{y:r(x,y)=1\}$$
@@ -117,7 +117,7 @@
       </section>
 
       <section class="section" id="methodology">
-        <p class="section__label">Part 01</p>
+        <p class="section__label">Part 02</p>
         <h2>Methodology</h2>
         <p>FlowSD starts from a group of responses sampled by the current policy. The verifier gives each response a stopped, group-relative advantage $A_i$. The same frozen rollout model is then given privileged context—such as a reference solution—and rescores the sampled tokens. Their average log-probability gain over the reference becomes the trajectory-level teacher signal $G_T(y_i)$.</p>
 
@@ -161,7 +161,7 @@
 
 
       <section class="section" id="balance">
-        <p class="section__label">Part 02</p>
+        <p class="section__label">Part 03</p>
         <h2>Trajectory Balance</h2>
         <p>FlowSD has already defined the desired distribution over complete responses. Trajectory balance turns that distribution into a trainable condition: if the student matches the target, then every sampled response $y_i$ must satisfy</p>
 
@@ -220,7 +220,7 @@
       </section>
 
       <section class="section" id="gate">
-        <p class="section__label">Part 03</p>
+        <p class="section__label">Part 04</p>
         <h2>When should FlowSD trust the privileged teacher?</h2>
         <p>Privileged likelihood and verifier correctness are different signals. A teacher may assign positive gain to a coherent-looking response that the verifier rejects. FlowSD therefore uses the sign of $A_i$ as a gate: teacher gain raises the energy of positive-advantage responses, lowers the energy of negative-advantage responses, and vanishes when $A_i=0$.</p>
 
@@ -284,7 +284,7 @@
       </section>
 
       <section class="section" id="results">
-        <p class="section__label">Part 04</p>
+        <p class="section__label">Part 05</p>
         <h2>Experiments</h2>
         <p>Across Qwen3-4B and Qwen3-8B, FlowSD achieves the strongest five-benchmark average. The training traces also show faster progress and a different response-length profile from direct on-policy self-distillation.</p>
 
@@ -322,7 +322,7 @@
       </section>
 
       <section class="section" id="diversity">
-        <p class="section__label">Part 05</p>
+        <p class="section__label">Part 06</p>
         <h2>Diversity Analysis</h2>
         <p>We use GPT-5.5 to extract the core mathematical representation and tools from each full AIME24 trajectory, then cluster anonymized summaries by semantic strategy rather than wording or response length. Correctness is revealed only after clustering, and diversity is computed on correct trajectories using</p>
 

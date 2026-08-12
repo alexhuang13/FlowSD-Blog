@@ -73,8 +73,8 @@
         </div>
 
         <div class="motivation-intro" id="motivation">
-          <p class="section__label">动机</p>
-          <h2>推理学习的对象，是完整轨迹上的概率分布</h2>
+          <p class="section__label">第一部分</p>
+          <h2>动机</h2>
           <p>给定问题 $x$，推理策略生成一条完整回答 $y=(y_1,\ldots,y_T)\sim\pi_\theta(\cdot\mid x)$。验证器返回结果信号 $r(x,y)$，例如最终答案是否正确。所有成功回答组成集合</p>
           <div class="equation-card equation-card--plain motivation-equation">
             $$\mathcal Y^+(x)=\{y:r(x,y)=1\}.$$
@@ -118,7 +118,7 @@
       </section>
 
       <section class="section" id="methodology">
-        <p class="section__label">第一部分</p>
+        <p class="section__label">第二部分</p>
         <h2>方法</h2>
         <p>FlowSD 首先用当前策略为同一道题采样一组回答。验证器为每条回答计算停止梯度的组相对优势 $A_i$。随后，同一个冻结的 rollout 模型获得参考解答等特权上下文，并重新评估已采样 token；相对于参考策略的平均对数概率增益，构成轨迹级教师信号 $G_T(y_i)$。</p>
 
@@ -162,7 +162,7 @@
 
 
       <section class="section" id="balance">
-        <p class="section__label">第二部分</p>
+        <p class="section__label">第三部分</p>
         <h2>轨迹平衡</h2>
         <p>FlowSD 已经定义了完整回答上的目标分布。轨迹平衡将这个分布转化为可训练的条件：如果学生策略匹配目标，那么每条采样回答 $y_i$ 都必须满足</p>
 
@@ -221,7 +221,7 @@
       </section>
 
       <section class="section" id="gate">
-        <p class="section__label">第三部分</p>
+        <p class="section__label">第四部分</p>
         <h2>FlowSD 应该何时信任特权教师？</h2>
         <p>特权似然与验证器正确性是两类不同信号。教师可能为一条逻辑连贯、但被验证器判错的回答赋予正增益。因此，FlowSD 用 $A_i$ 的符号作为门控：教师增益会提高正优势回答的能量、降低负优势回答的能量，并在 $A_i=0$ 时消失。</p>
 
@@ -285,7 +285,7 @@
       </section>
 
       <section class="section" id="results">
-        <p class="section__label">第四部分</p>
+        <p class="section__label">第五部分</p>
         <h2>实验</h2>
         <p>在 Qwen3-4B 和 Qwen3-8B 上，FlowSD 都取得了最高的五项基准平均分。训练曲线还显示，FlowSD 收敛更快，并呈现出不同于直接在策略自蒸馏的回答长度变化。</p>
 
@@ -323,7 +323,7 @@
       </section>
 
       <section class="section" id="diversity">
-        <p class="section__label">第五部分</p>
+        <p class="section__label">第六部分</p>
         <h2>多样性分析</h2>
         <p>我们使用 GPT-5.5 从每条完整 AIME24 轨迹中提取核心数学表示与工具，再依据语义策略而非措辞或回答长度，对匿名摘要进行聚类。聚类完成后才揭示正确性标签，并在正确轨迹上用下式计算多样性：</p>
 

@@ -62,30 +62,8 @@
         <h1>FlowSD: Trajectory-Balanced OPSD</h1>
         <p class="hero__tagline">Learning a distribution over complete reasoning paths.</p>
         <p class="hero__lead">
-          Long-horizon reasoning problems often admit multiple valid solution strategies. RL with verifiable rewards offers reliable but sparse outcome supervision, while on-policy self-distillation adds dense privileged feedback; however, standard local objectives still do not specify how probability should be distributed over complete responses. FlowSD fills this gap by defining a reference-supported target from verifier-derived group advantages and sign-gated teacher gains. It then fits this normalized target with profiled trajectory balance, explicitly determining where reasoning probability mass should settle.
+          FlowSD treats reasoning as a distribution-learning problem: the goal is not only to make one answer correct, but to allocate probability across complete, verifier-approved solution paths. It combines outcome supervision and privileged self-teaching in an explicit target distribution, then learns that target with trajectory balance.
         </p>
-
-        <div class="motivation-visual" id="motivation">
-          <div class="motivation-visual__story" aria-label="Motivation narrative">
-            <article>
-              <span>RLVR</span>
-              <b>Correctness anchor</b>
-              <p>Knows which complete responses pass, but gives little credit assignment inside the reasoning path.</p>
-            </article>
-            <article class="motivation-visual__negative">
-              <span>OPSD / SDPO</span>
-              <b>Dense teacher signal</b>
-              <p>Can compress reasoning into shorter, overconfident traces when the privileged teacher is trusted locally.</p>
-            </article>
-          </div>
-
-          <figure class="motivation-figure">
-            <a class="motivation-figure__link" href="https://arxiv.org/pdf/2603.24472v3" target="_blank" rel="noopener">
-              <img src="negative.png" alt="Negative result: SDPO drops in training score and response length compared with GRPO." />
-            </a>
-            <figcaption><b>Negative case.</b> Dense self-distillation can look confident while collapsing response length and hurting training score. <a href="https://arxiv.org/pdf/2603.24472v3" target="_blank" rel="noopener">Source: arXiv:2603.24472v3</a>.</figcaption>
-          </figure>
-        </div>
 
         <div class="byline">
           <p class="authors">Zixun Huang<sup>*1,2</sup>, Kishan Panaganti<sup>*†1</sup>, Haitao Mi<sup>1</sup>, Leowei Liang<sup>1</sup></p>
@@ -93,6 +71,48 @@
           <p><sup>*</sup>Equal contribution, &nbsp;<sup>†</sup>Project lead</p>
         </div>
 
+        <div class="motivation-intro" id="motivation">
+          <p class="section__label">Motivation</p>
+          <h2>Reasoning is a distribution over complete trajectories</h2>
+          <p>Given a problem $x$, a reasoning policy generates a complete response $y=(y_1,\ldots,y_T)\sim\pi_\theta(\cdot\mid x)$. A verifier returns an outcome $r(x,y)$—for example, whether the final answer is correct. The successful set</p>
+          <div class="equation-card equation-card--plain motivation-equation">
+            $$\mathcal Y^+(x)=\{y:r(x,y)=1\}$$
+          </div>
+          <p>usually contains more than one trajectory. Two responses can reach the same correct answer through different representations, intermediate arguments, or solution strategies. Therefore, improving a reasoning model is not only about increasing $\Pr_{y\sim\pi_\theta}[r(x,y)=1]$; it is also about deciding how probability should be allocated <em>within</em> $\mathcal Y^+(x)$.</p>
+
+          <div class="motivation-visual">
+            <div class="motivation-visual__story" aria-label="Motivation narrative">
+              <article>
+                <span>Outcome-only RL</span>
+                <b>Correctness is known only at the end</b>
+                <p>RLVR can identify successful responses, but a sparse terminal reward does not distinguish useful reasoning choices inside them or preserve several successful modes.</p>
+              </article>
+              <article class="motivation-visual__negative">
+                <span>Negative case</span>
+                <b>Dense feedback is not automatically safe</b>
+                <p>Local OPSD objectives may over-trust token-level teacher likelihood, producing shorter and more confident traces without improving correctness.</p>
+              </article>
+              <article class="motivation-visual__opportunity">
+                <span>Missed opportunity</span>
+                <b>The rollout group already contains multiple teachers</b>
+                <p>When several sampled trajectories are correct, each one reveals a valid way to solve the problem—not merely another token sequence to imitate independently.</p>
+              </article>
+            </div>
+
+            <figure class="motivation-figure">
+              <a class="motivation-figure__link" href="https://arxiv.org/pdf/2603.24472v3" target="_blank" rel="noopener">
+                <img src="negative.png" alt="Negative result: SDPO drops in training score and response length compared with GRPO." />
+              </a>
+              <figcaption><b>Negative case.</b> Dense self-distillation can look confident while collapsing response length and hurting training score. <a href="https://arxiv.org/pdf/2603.24472v3" target="_blank" rel="noopener">Source: arXiv:2603.24472v3</a>.</figcaption>
+            </figure>
+          </div>
+
+          <h3 class="subhead">What current self-distillation leaves unspecified</h3>
+          <p>Standard self-distillation uses privileged information to score tokens or shape local updates. But even when a rollout group contains several correct trajectories, these objectives do not define their joint, normalized distribution: how much mass should each successful path receive, how should one correct strategy be balanced against another, and how should both be separated from plausible but incorrect paths?</p>
+          <p>Our motivating bet is simple: <strong>multiple correct trajectories should be used as a distributional learning signal.</strong> The verifier should anchor which responses succeed; the privileged teacher should reveal useful structure along each sampled path; and the reference policy should prevent unconstrained drift. What is missing is a global condition that turns these ingredients into consistent probabilities over complete answers.</p>
+
+          <aside class="story-callout motivation-transition"><b>From motivation to method.</b> FlowSD formalizes this idea by constructing a reference-supported target distribution over the sampled trajectories and fitting it with trajectory balance. The next section shows how verifier advantages and privileged teacher gains define that target.</aside>
+        </div>
 
       </section>
 

@@ -540,3 +540,67 @@ html[lang="zh-CN"] figcaption { font-family: "Inter", "PingFang SC", "Microsoft 
   html[lang="zh-CN"] .hero h1 { font-size: clamp(34px, 9.3vw, 43px); }
   html[lang="zh-CN"] .hero__tagline { font-size: 19px; }
 }
+
+/* Expanded motivation: problem definition -> failure case -> distributional bet. */
+.motivation-intro{padding-top:70px;scroll-margin-top:72px}
+.motivation-intro>h2{margin:9px 0 18px;font-size:clamp(29px,3.8vw,38px);letter-spacing:-.02em}
+.motivation-intro>p{color:var(--soft)}
+.motivation-equation{margin:18px auto 22px!important;text-align:center}
+.motivation-equation mjx-container[display=true]{margin:.35em 0!important}
+.motivation-visual__opportunity{border-left-color:var(--blue)!important;background:var(--blue-wash)!important}
+.motivation-visual__opportunity span{color:var(--blue-ink)}
+.motivation-transition{margin-top:28px!important}
+@media(max-width:760px){.motivation-intro{padding-top:58px}.motivation-intro>h2{font-size:30px}}
+
+/* Motivation layout: three narrative cards in one row, figure on its own row. */
+.motivation-visual{
+  grid-template-columns:1fr;
+  align-items:start;
+}
+.motivation-visual__story{
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:12px;
+}
+.motivation-visual__story article{
+  min-height:190px;
+}
+.motivation-visual__story article::after{
+  display:none;
+}
+.motivation-figure{
+  width:100%;
+}
+.motivation-figure__link{
+  display:flex;
+  justify-content:center;
+  background:#fff;
+}
+.motivation-figure img{
+  width:100%;
+  max-height:430px;
+  object-fit:contain;
+}
+@media(max-width:760px){
+  .motivation-visual__story{grid-template-columns:1fr}
+  .motivation-visual__story article{min-height:0}
+}
+
+/* Place the negative-case figure above the three cards at a readable natural size. */
+.motivation-figure{
+  order:-1;
+  width:min(100%,680px);
+  justify-self:center;
+}
+.motivation-figure__link{
+  display:block;
+}
+.motivation-figure img{
+  width:auto;
+  max-width:100%;
+  max-height:none;
+  margin:0 auto;
+  object-fit:initial;
+}
+@media(max-width:760px){
+  .motivation-figure{width:100%}
+}
